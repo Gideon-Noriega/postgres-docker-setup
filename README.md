@@ -45,6 +45,25 @@ make restore # Restore from backup
 - `init/01-init.sql` - Database initialization
 - `Makefile` - Management commands
 
+## Configuration
+
+The `postgresql.conf` file includes production-optimized settings:
+
+**Memory Settings:**
+- `shared_buffers = 256MB` - RAM for caching data pages
+- `effective_cache_size = 1GB` - OS cache size estimate
+- `work_mem = 4MB` - Memory per query operation
+
+**Performance:**
+- `max_connections = 200` - Concurrent connections
+- `random_page_cost = 1.1` - Optimized for SSDs
+- `effective_io_concurrency = 200` - Concurrent I/O operations
+
+**Logging:**
+- `log_min_duration_statement = 1000` - Log slow queries (>1s)
+- `log_connections = on` - Track connections
+- `log_checkpoints = on` - Monitor checkpoints
+
 ## Production Features
 
 - PostgreSQL 17 (latest)
@@ -53,6 +72,21 @@ make restore # Restore from backup
 - Optimized memory settings
 - Comprehensive logging
 - Auto-restart policy
+
+## Logs
+
+View logs using:
+```bash
+# Container logs
+make logs
+
+# PostgreSQL log files
+docker exec postgres_prod tail -f /var/lib/postgresql/data/pgdata/log/postgresql-*.log
+```
+
+**Log locations:**
+- Container: `/var/lib/postgresql/data/pgdata/log/`
+- Host: `/var/lib/docker/volumes/postgres_wh_postgres_data/_data/pgdata/log/`
 
 ## Version Upgrade
 
